@@ -1,4 +1,4 @@
-package server;
+package server.http;
 
 public class HttpResponse {
 
@@ -20,6 +20,10 @@ public class HttpResponse {
 
     public static String Created () {
         return "HTTP/1.1 201 Created\r\n\r\n";
+    }
+
+    public static String NotAllowed () {
+        return "HTTP/1.1 405 Not Allowed\r\n\r\n";
     }
 
     public static String OK () {
