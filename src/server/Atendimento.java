@@ -1,5 +1,8 @@
 package server;
 
+import server.http.HttpRequest;
+import server.http.HttpResponse;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,21 +17,35 @@ public class Atendimento {
 
         while (true) {
             Socket cliente = servidor.accept();
-            InputStreamReader isr = new InputStreamReader(cliente.getInputStream());
-            BufferedReader reader = new BufferedReader(isr);
-            String line = reader.readLine();
-            while (line != null && !line.isEmpty()) {
-                System.out.println(line);
-                line = reader.readLine();
-            }
+
+            HttpRequest httpRequest = HttpRequest.getRequest(cliente);
+
+            redirectToRoute(httpRequest.method, httpRequest.endpoint);
+
+            System.out.println("Metodo:"+ httpRequest.method);
 
             String payload = "Servidor socket funcionando!";
-            cliente.getOutputStream() .write(HttpResponse.OK(payload).getBytes("UTF-8"));
-            cliente.close();;
-            isr.close();
-            reader.close();
+            cliente.getOutputStream().write(HttpResponse.OK(payload).getBytes("UTF-8"));
+            cliente.close();
 
         }
 
+    }
+
+    private static void redirectToRoute(String method, String endpoint) {
+        switch (endpoint){
+            case "consumo/monitorar":
+                break;
+            case "consumo/obter-boleto":
+                break;
+            case "monitor/definir-consumo":
+                break;
+            case "monitor/aumentar-consumo":
+                break;
+            case "monitor/diminuir-consumo":
+                break;
+            case "monitor/cadastrar-cliente":
+                break;
+        }
     }
 }
