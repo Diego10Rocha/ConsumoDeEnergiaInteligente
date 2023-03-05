@@ -1,4 +1,4 @@
-package server;
+package server.http;
 
 public class HttpResponse {
 
@@ -36,5 +36,9 @@ public class HttpResponse {
 
     public static String InternalServerError () {
         return "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+    }
+
+    public static String NotAllowed () {
+        return "HTTP/1.1 405 Not Allowed\r\n\r\n";
     }
 }
