@@ -1,7 +1,5 @@
 package server.http;
 
-import server.Request;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,60 +10,91 @@ import java.util.Map;
 public class HttpRequest {
 
     public HttpRequest(){
-        this.params = new HashMap<>();
+        this.getParams = new HashMap<>();
         this.headers = new HashMap<>();
     }
-    public String method;
-    public String endpoint;
-    public Map<String, String> headers;
-    public Map<String, String> params;
-    public String body;
 
-    public static Request getRequest(Socket cliente) throws IOException {
-        Request request = new Request();
+    private String method;
+    private String endpoint;
+    private Map<String, String> headers;
+    private Map<String, String> getParams;
+    private String body;
+
+    private String host;
+
+    public static HttpRequest getRequest(Socket cliente) throws IOException {
+
         HttpRequest httpRequest = new HttpRequest();
         InputStreamReader isr = new InputStreamReader(cliente.getInputStream());
         BufferedReader reader = new BufferedReader(isr);
+        String line = null;
 
-        String line = reader.readLine();
-        if(line.contains("HTTP")) {
-            request.setIsHttp(true);
+        if(reader.ready())
+            line = reader.readLine();
+
+        if(line != null && line.contains("HTTP")) {
             String[] lineOne = line.split(" ");
             httpRequest.method = lineOne[0];
             String[] endpointAux = lineOne[1].split("\\?");
             httpRequest.endpoint = endpointAux[0];
             for (int i = 1; i < endpointAux.length; i++) {
                 String[] param = endpointAux[i].split("=");
-                httpRequest.params.put(param[0], param[1]);
+                httpRequest.getParams.put(param[0], param[1]);
             }
 
-            while (line != null && !line.isEmpty()) {
-                System.out.println(line);
-                line = reader.readLine();
-            }
-
+            httpRequest.host = reader.readLine();
             StringBuilder builder = new StringBuilder();
 
             while (reader.ready()) {
                 builder.append((char) reader.read());
             }
+
             String body = builder.toString();
             body = body.replace("\n", "");
             body = body.replace("\t", "");
 
             httpRequest.body = body;
-            //System.out.println(body);
-            request.setHttpRequest(httpRequest);
-        } else {
-            request.setIsHttp(false);
-            StringBuilder payload = new StringBuilder(line);
-            while (line != null && !line.isEmpty()) {
-                System.out.println(line);
-                payload.append(line);
-                line = reader.readLine();
-            }
-            request.setMonitorRequest(String.valueOf(payload));
         }
-        return request;
+        return httpRequest;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
+    }
+
+    public Map<String, String> getParams() {
+        return getParams;
+    }
+
+    public void setParams(Map<String, String> params) {
+        this.getParams = params;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 }

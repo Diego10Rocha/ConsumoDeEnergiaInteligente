@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-public class Medidor {
+public class Medidor2 {
     private static String codigoContrato;
 
     private static Integer valorConsumido = 0;
@@ -73,7 +73,7 @@ public class Medidor {
                     MedidorDTO medidorDTO = new MedidorDTO(codigoContrato, valorConsumido);
                     String payload = new Gson().toJson(medidorDTO);
                     String requestPattern = Request.makeRequest(HttpMethod.GET.getDescricao(), "/medicao", payload);
-                    //System.out.println(requestPattern);
+
                     cliente.getOutputStream().write(requestPattern.getBytes(StandardCharsets.UTF_8));
                     Thread.sleep(10000);
                 } catch (IOException | InterruptedException e) {

@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public class ConsumoCliente {
     private String dataMedicao;
-    private Double valorConsumido;
+    private Integer valorConsumido;
 
-    public ConsumoCliente(Double valorConsumido) {
+    public ConsumoCliente(Integer valorConsumido) {
         this.dataMedicao = LocalDate.now().toString();
         this.valorConsumido = valorConsumido;
     }
