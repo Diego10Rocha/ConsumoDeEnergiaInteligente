@@ -16,14 +16,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class ConsumoService {
-    public static ConsumoCliente getConsumoAtual(HttpRequest httpRequest) throws HTTPException, Error {
+    public synchronized static ConsumoCliente getConsumoAtual(HttpRequest httpRequest) throws HTTPException, Error {
         if(!httpRequest.getMethod().equals(HttpMethod.GET.getDescricao()))
             throw new HTTPException();
         if(!httpRequest.getParams().containsKey("contrato") || !AtendimentoThread.getMedidores().containsKey(httpRequest.getParams().get("contrato")))
             throw new Error("'contrato' not found!");
         List<MedidorDTO> medidorDTOS = AtendimentoThread.getMedidores().get(httpRequest.getParams().get("contrato"));
         int ultimaMedicao = !medidorDTOS.isEmpty()? medidorDTOS.get(medidorDTOS.size()-1).getValorMedicao() : 0;
-        List<MedidorDTO> alertas = medidorDTOS.stream().filter(medidorDTO -> medidorDTO.isAlerta()).collect(Collectors.toList());
+        List<MedidorDTO> alertas = medidorDTOS.stream().filter(MedidorDTO::isAlerta).toList();
         List<String> mensagem = new ArrayList<>();
         alertas.forEach(alerta -> {
             String aux = String.format("ALERTA: Houve um aumento significativo no seu consumo de energia na medição do momento: %s", alerta.getDataHoraMedicao());
@@ -32,7 +32,7 @@ public class ConsumoService {
         return new ConsumoCliente(ultimaMedicao, mensagem);
     }
 
-    public static BoletoCliente getBoleto(HttpRequest httpRequest) throws HTTPException, Error {
+    public synchronized static BoletoCliente getBoleto(HttpRequest httpRequest) throws HTTPException, Error {
         if(!httpRequest.getMethod().equals(HttpMethod.GET.getDescricao()))
             throw new HTTPException();
         Objects.requireNonNull(httpRequest.getParams());
