@@ -1,6 +1,7 @@
 package dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class MedidorDTO {
 
@@ -10,10 +11,12 @@ public class MedidorDTO {
 
     private String dataHoraMedicao;
 
+    private boolean alerta;
+
     public MedidorDTO(String codigoContrato, Integer valorMedicao) {
         this.codigoContrato = codigoContrato;
         this.valorMedicao = valorMedicao;
-        this.dataHoraMedicao = LocalDate.now().toString();
+        this.dataHoraMedicao = LocalDateTime.now().toString();
     }
 
     public String getCodigoContrato() {
@@ -38,5 +41,13 @@ public class MedidorDTO {
 
     public void setDataHoraMedicao(String dataHoraMedicao) {
         this.dataHoraMedicao = dataHoraMedicao;
+    }
+
+    public boolean isAlerta() {
+        return alerta;
+    }
+
+    public void setAlerta(boolean alerta) {
+        this.alerta = alerta;
     }
 }

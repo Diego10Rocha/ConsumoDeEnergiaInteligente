@@ -19,7 +19,7 @@ public class Usuario {
         /*while (teclado.hasNextLine()) {
             saida.println(teclado.nextLine());
         }*/
-        BoletoCliente boletoCliente = new BoletoCliente("12332", 100.2);
+        BoletoCliente boletoCliente = new BoletoCliente("12332", 100);
         String payload = new Gson().toJson(boletoCliente);
         saida.println(payload);
         saida.close();

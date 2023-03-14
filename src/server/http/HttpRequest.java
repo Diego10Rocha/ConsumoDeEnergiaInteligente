@@ -32,6 +32,9 @@ public class HttpRequest {
         if(reader.ready())
             line = reader.readLine();
 
+        if(line == null)
+            line = reader.readLine();
+
         if(line != null && line.contains("HTTP")) {
             String[] lineOne = line.split(" ");
             httpRequest.method = lineOne[0];

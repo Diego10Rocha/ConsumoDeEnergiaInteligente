@@ -73,7 +73,6 @@ public class Medidor {
                     MedidorDTO medidorDTO = new MedidorDTO(codigoContrato, valorConsumido);
                     String payload = new Gson().toJson(medidorDTO);
                     String requestPattern = Request.makeRequest(HttpMethod.GET.getDescricao(), "/medicao", payload);
-                    //System.out.println(requestPattern);
                     cliente.getOutputStream().write(requestPattern.getBytes(StandardCharsets.UTF_8));
                     Thread.sleep(10000);
                 } catch (IOException | InterruptedException e) {
